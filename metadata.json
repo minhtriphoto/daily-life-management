@@ -1,0 +1,6 @@
+{
+  "name": "Daily Life Automation Hub",
+  "description": "Notion-like productivity application for managing tasks, habits, expenses, pomodoro, and daily automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
