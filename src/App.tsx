@@ -14,10 +14,12 @@ import { ViewType } from './types';
 import { AppProvider, useAppContext } from './context/AppContext';
 
 import { QuickAddModal } from './components/QuickAddModal';
+import { SearchModal } from './components/SearchModal';
 
 function MainLayout() {
   const [activeView, setActiveView] = useState<ViewType>('dashboard');
   const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [quickAddTab, setQuickAddTab] = useState<'task' | 'habit' | 'expense'>('task');
   const { currentUser, login } = useAppContext();
   const [email, setEmail] = useState('');
@@ -81,7 +83,7 @@ function MainLayout() {
       <Sidebar activeView={activeView} onChangeView={setActiveView} />
       
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-secondary/50">
-        <Topbar title={getViewTitle()} onQuickAdd={() => openQuickAdd('task')} />
+        <Topbar title={getViewTitle()} onQuickAdd={() => openQuickAdd('task')} onSearch={() => setIsSearchOpen(true)} />
         
         <main className="flex-1 overflow-y-auto">
           {renderView()}
@@ -92,6 +94,11 @@ function MainLayout() {
         isOpen={isQuickAddOpen} 
         onClose={() => setIsQuickAddOpen(false)} 
         defaultTab={quickAddTab} 
+      />
+      
+      <SearchModal 
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
       />
     </div>
   );

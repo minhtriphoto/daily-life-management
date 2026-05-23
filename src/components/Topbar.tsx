@@ -5,9 +5,10 @@ import { useAppContext } from '../context/AppContext';
 interface TopbarProps {
   title: string;
   onQuickAdd: () => void;
+  onSearch: () => void;
 }
 
-export function Topbar({ title, onQuickAdd }: TopbarProps) {
+export function Topbar({ title, onQuickAdd, onSearch }: TopbarProps) {
   const { currentUser } = useAppContext();
 
   return (
@@ -21,7 +22,7 @@ export function Topbar({ title, onQuickAdd }: TopbarProps) {
       </div>
       
       <div className="flex items-center gap-4">
-        <button className="p-1.5 hover:bg-secondary rounded-md border border-border text-muted-foreground transition-colors">
+        <button onClick={onSearch} className="p-1.5 hover:bg-secondary rounded-md border border-border text-muted-foreground transition-colors">
           <Search size={16} />
         </button>
         <button className="p-1.5 hover:bg-secondary rounded-md border border-border text-primary transition-colors">
