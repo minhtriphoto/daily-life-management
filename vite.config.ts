@@ -4,10 +4,9 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
-  // Try to extract repository name from GITHUB_REPOSITORY for GitHub Pages deployment
-  const isGitHubActions = process.env.GITHUB_ACTIONS === 'true';
-  const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : null;
-  const basePath = isGitHubActions && repoName ? `/${repoName}/` : './';
+  // Use relative base path for GitHub Pages to support any repository name automatically.
+  // This works perfectly because the app is an SPA without a browser-history React Router.
+  const basePath = './';
 
   return {
     base: basePath,
