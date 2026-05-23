@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Task, Habit, Expense, ViewType } from '../types';
 import { mockTasks, mockHabits, mockExpenses } from '../data';
 
@@ -38,12 +38,45 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
-  const [habits, setHabits] = useState<Habit[]>(mockHabits);
-  const [expenses, setExpenses] = useState<Expense[]>(mockExpenses);
-  const [income, setIncome] = useState<number>(24500000);
-  const [budget, setBudget] = useState<number>(15000000);
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    const saved = localStorage.getItem('app_user');
+    return saved ? JSON.parse(saved) : null;
+  });
+  
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const saved = localStorage.getItem('app_tasks');
+    return saved ? JSON.parse(saved) : mockTasks;
+  });
+  const [habits, setHabits] = useState<Habit[]>(() => {
+    const saved = localStorage.getItem('app_habits');
+    return saved ? JSON.parse(saved) : mockHabits;
+  });
+  const [expenses, setExpenses] = useState<Expense[]>(() => {
+    const saved = localStorage.getItem('app_expenses');
+    return saved ? JSON.parse(saved) : mockExpenses;
+  });
+  const [income, setIncome] = useState<number>(() => {
+    const saved = localStorage.getItem('app_income');
+    return saved && !isNaN(Number(saved)) ? Number(saved) : 24500000;
+  });
+  const [budget, setBudget] = useState<number>(() => {
+    const saved = localStorage.getItem('app_budget');
+    return saved && !isNaN(Number(saved)) ? Number(saved) : 15000000;
+  });
+
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem('app_user', JSON.stringify(currentUser));
+    } else {
+      localStorage.removeItem('app_user');
+    }
+  }, [currentUser]);
+
+  useEffect(() => { localStorage.setItem('app_tasks', JSON.stringify(tasks)); }, [tasks]);
+  useEffect(() => { localStorage.setItem('app_habits', JSON.stringify(habits)); }, [habits]);
+  useEffect(() => { localStorage.setItem('app_expenses', JSON.stringify(expenses)); }, [expenses]);
+  useEffect(() => { localStorage.setItem('app_income', income.toString()); }, [income]);
+  useEffect(() => { localStorage.setItem('app_budget', budget.toString()); }, [budget]);
 
   const login = (email: string, pass: string) => {
     if (email === 'minhtri89.no1@gmail.com' && pass === 'Lov3nov3l@89') {
